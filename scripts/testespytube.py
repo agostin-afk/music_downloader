@@ -40,6 +40,7 @@ def teste_Criar_arqv(url):
             add_Video_Erro_List(f"{_}", name_arqv)
             print(f"Erro ao obter título do vídeo: {_}")
             
+            
 
 teste_Criar_arqv(teste_playlist)
 # lembrar de criar um jeito de tentar baixar 3 vezes e depois criar um arquivo com o nome e/ou a url
