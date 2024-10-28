@@ -40,8 +40,11 @@ def teste_Criar_arqv(url):
             add_Video_Erro_List(f"{_}", name_arqv)
             print(f"Erro ao obter título do vídeo: {_}")
             
-            
+def get_nome_plalist():
+    
+    p = Playlist("https://www.youtube.com/playlist?list=PLjpaTyNnuw2CVu4D1-OjK7KvocgRmDjDj")
+    return f"{p.title.encode("utf-8").decode("utf-8")}"
 
-teste_Criar_arqv(teste_playlist)
+# teste_Criar_arqv(teste_playlist)
 # lembrar de criar um jeito de tentar baixar 3 vezes e depois criar um arquivo com o nome e/ou a url
 # do video caso não dê certo
