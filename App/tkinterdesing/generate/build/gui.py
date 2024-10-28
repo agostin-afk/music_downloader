@@ -2,41 +2,57 @@ from dotenv import load_dotenv
 from pathlib import Path
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
 import os
-from Scripts.testespytube import *
+from Scripts.testespytube import teste_Criar_arqv
 import time
-# from scripts.testespytube import get_nome_plalist
+
 BASE_DIR = Path(__file__).resolve().parent.parent.parent.parent.parent
 load_dotenv(BASE_DIR / 'dotenv_files' / '.env', override=True)
 OUTPUT_PATH = os.getenv('DIR_FILE')
 ASSETS_PATH = str(OUTPUT_PATH) + "\\assets\\frame0"
 
 from pytube import Playlist, YouTube
+current_message_index = 0
+messages_to_display = []
+
+
 def update_terminal_output(new_message):
-    current_text = canvas.itemcget(terminal_text_id, "text") 
-    messages = current_text.split("\n")                      
-    messages.append(new_message)                            
+    current_text = canvas.itemcget(terminal_text_id, "text")
+    messages = current_text.split("\n")
+
+    messages.append(new_message)
+
     max_lines = 10
     if len(messages) > max_lines:
-        messages.pop(0) 
-
+        messages.pop(0)
 
     updated_text = "\n".join(messages)
     canvas.itemconfig(terminal_text_id, text=updated_text)
+
+
+def display_messages():
+    global current_message_index
+
+    if current_message_index < len(messages_to_display):
+        update_terminal_output(messages_to_display[current_message_index])
+        current_message_index += 1
+        window.after(500, display_messages) 
+
+
 def get_nome_plalist():
-    nome_playlist_get = entry_1.get()  # Pega o texto da Entry
+    global current_message_index, messages_to_display
+
+    nome_playlist_get = entry_1.get()
     p = Playlist(f"{nome_playlist_get}")
-    print(f"Nome digitado: {nome_playlist_get}")
     nome_playlist = p.title.encode("utf-8").decode("utf-8")
     canvas.itemconfig(text_id, text=nome_playlist)
-    
+
     teste_Criar_arqv(nome_playlist_get)
-    for i in range(20):
-        update_terminal_output(f"Título da playlist: {nome_playlist}")
-        print(f"{p.title.encode('utf-8').decode('utf-8')}")
-    return f"{p.title.encode('utf-8').decode('utf-8')}"
-# print(BASE_DIR)
-# print(f"OUTPUT_PATH: {OUTPUT_PATH}")
-# print(f"ASSETS_PATH: {ASSETS_PATH}\n")
+    
+
+    messages_to_display = [f"Título da playlist: {nome_playlist}" for _ in range(20)]
+    current_message_index = 0
+    display_messages()
+
 
 
 def relative_to_assets(path: str) -> Path:
