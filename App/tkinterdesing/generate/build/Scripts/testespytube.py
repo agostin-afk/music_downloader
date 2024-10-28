@@ -35,7 +35,7 @@ def teste_Criar_arqv(url):
     for _ in url:
         try:
             # print(_.watch_url)
-            print(_)
+           pass
         except KeyError:
             add_Video_Erro_List(f"{_}", name_arqv)
             print(f"Erro ao obter título do vídeo: {_}")

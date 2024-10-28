@@ -2,6 +2,8 @@ from dotenv import load_dotenv
 from pathlib import Path
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
 import os
+from Scripts.testespytube import *
+import time
 # from scripts.testespytube import get_nome_plalist
 BASE_DIR = Path(__file__).resolve().parent.parent.parent.parent.parent
 load_dotenv(BASE_DIR / 'dotenv_files' / '.env', override=True)
@@ -9,12 +11,28 @@ OUTPUT_PATH = os.getenv('DIR_FILE')
 ASSETS_PATH = str(OUTPUT_PATH) + "\\assets\\frame0"
 
 from pytube import Playlist, YouTube
+def update_terminal_output(new_message):
+    current_text = canvas.itemcget(terminal_text_id, "text") 
+    messages = current_text.split("\n")                      
+    messages.append(new_message)                            
+    max_lines = 10
+    if len(messages) > max_lines:
+        messages.pop(0) 
+
+
+    updated_text = "\n".join(messages)
+    canvas.itemconfig(terminal_text_id, text=updated_text)
 def get_nome_plalist():
     nome_playlist_get = entry_1.get()  # Pega o texto da Entry
     p = Playlist(f"{nome_playlist_get}")
     print(f"Nome digitado: {nome_playlist_get}")
     nome_playlist = p.title.encode("utf-8").decode("utf-8")
     canvas.itemconfig(text_id, text=nome_playlist)
+    
+    teste_Criar_arqv(nome_playlist_get)
+    for i in range(20):
+        update_terminal_output(f"Título da playlist: {nome_playlist}")
+        print(f"{p.title.encode('utf-8').decode('utf-8')}")
     return f"{p.title.encode('utf-8').decode('utf-8')}"
 # print(BASE_DIR)
 # print(f"OUTPUT_PATH: {OUTPUT_PATH}")
@@ -124,8 +142,19 @@ canvas.create_rectangle(
     632.0,
     338.0,
     fill="#9F9F9F",
-    outline="")
+    outline=""
+)
 
+# Cria o texto inicial dentro do retângulo e salva o ID do texto em `terminal_text_id`
+terminal_text_id = canvas.create_text(
+    300.0,     # Posição X
+    120.0,     # Posição Y
+    anchor="nw",
+    text="Mensagens do terminal:\n",
+    fill="#000000",
+    font=("Inter", 10),
+    width=320   # Limita a largura do texto para caber no retângulo
+)
 
 canvas.create_text(
     292.0,
