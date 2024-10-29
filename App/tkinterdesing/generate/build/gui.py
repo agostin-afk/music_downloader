@@ -45,10 +45,6 @@ def get_nome_plalist():
     p = Playlist(f"{nome_playlist_get}")
     nome_playlist = p.title.encode("utf-8").decode("utf-8")
     canvas.itemconfig(text_id, text=nome_playlist)
-
-    download_audio(nome_playlist_get)
-    
-
     messages_to_display = [f"Título da playlist: {nome_playlist}" for _ in range(20)]
     current_message_index = 0
     display_messages()
