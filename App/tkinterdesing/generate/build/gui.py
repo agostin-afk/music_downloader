@@ -2,7 +2,7 @@ from dotenv import load_dotenv
 from pathlib import Path
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
 import os
-from Scripts.testespytube import teste_Criar_arqv
+from Scripts.downloader import download_audio
 import time
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent.parent.parent
@@ -46,7 +46,7 @@ def get_nome_plalist():
     nome_playlist = p.title.encode("utf-8").decode("utf-8")
     canvas.itemconfig(text_id, text=nome_playlist)
 
-    teste_Criar_arqv(nome_playlist_get)
+    download_audio(nome_playlist_get)
     
 
     messages_to_display = [f"Título da playlist: {nome_playlist}" for _ in range(20)]

@@ -1,5 +1,6 @@
 # from pytube import Playlist, YouTube
 from pytubefix import YouTube, Playlist
+from testespytube import * #type: ignore
 import threading
 import os
 
