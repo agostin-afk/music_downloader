@@ -1,8 +1,9 @@
-from pytube import Playlist, YouTube
+# from pytube import Playlist, YouTube
+from pytubefix import YouTube, Playlist
 import threading
 import os
 
-p = Playlist("https://www.youtube.com/playlist?list=PL-EWx9Mw_fia6Od7xe3w3EdYrIdEn_DQm")
+p = Playlist("https://www.youtube.com/playlist?list=PLc0FtbJjhNUyOVaQ5r0sqd9YewHM9PSoL")
 
 print(f'A playlist escolhida foi: {p.title.encode("utf-8").decode("utf-8")}')
 
@@ -12,10 +13,7 @@ def download_audio(video_url):
     try:
         yt = YouTube(video_url)
         audio_stream = yt.streams.filter(only_audio=True).first()
-        audio_file = audio_stream.download()  # type: ignore
-        base, ext = os.path.splitext(audio_file)
-        new_file = base + '.mp3'
-        os.rename(audio_file, new_file)
+        audio_file = audio_stream.download(mp3=True)  # type: ignore
         print(f'Áudio do vídeo {yt.title.encode("utf-8").decode("utf-8")} baixado e convertido para mp3 com sucesso.')
     except Exception as e:
         videos_erros.append(video_url)
