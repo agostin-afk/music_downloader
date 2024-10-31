@@ -38,7 +38,7 @@ def display_messages():
         window.after(500, display_messages) 
 
 
-def get_nome_plalist():
+def download():
     global current_message_index, messages_to_display
 
     nome_playlist_get = entry_1.get()
@@ -183,7 +183,7 @@ button_1 = Button(
     image=button_image_1,
     borderwidth=0,
     highlightthickness=0,
-    command=get_nome_plalist,
+    command=download,
     relief="flat"
 )
 button_1.place(
