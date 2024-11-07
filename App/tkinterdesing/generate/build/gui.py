@@ -7,33 +7,34 @@ import time
 
 from pytubefix import Playlist
 
-# Diretório base e carregamento de variáveis de ambiente
+
 BASE_DIR = Path(__file__).resolve().parent.parent.parent.parent.parent
 load_dotenv(BASE_DIR / 'dotenv_files' / '.env', override=True)
 OUTPUT_PATH = os.getenv('DIR_FILE')
 ASSETS_PATH = str(OUTPUT_PATH) + "\\assets\\frame0"
 
-# Função auxiliar para obter o caminho dos assets
+
 def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
 
-# Função de download que exibe o título da playlist e mensagens de progresso
 def download():
     p = Audio()
     playlist_url = entry_1.get()
     playlist = Playlist(playlist_url)
     
-    # # Atualiza o título da playlist
+
     title_box = playlist.title.encode("utf-8").decode("utf-8")
     canvas.itemconfig(text_id, text=title_box)
 
-    # Exibe mensagem de progresso no Text widget
+
     for _ in playlist:
         text_widget.config(state="normal")
         text_widget.insert("end",f"{p.download_audio(_)}\n")
+        text_widget.see("end")
+        text_widget.update()
         text_widget.config(state="disabled")
 
-# Configurações principais da janela e Canvas
+
 window = Tk()
 window.geometry("670x450")
 window.configure(bg="#FFFFFF")
@@ -49,7 +50,7 @@ canvas = Canvas(
 )
 canvas.place(x=0, y=0)
 
-# Desenho dos elementos de interface
+
 canvas.create_rectangle(0.0, 0.0, 670.0, 450.0, fill="#D9D9D9", outline="")  # Background direita
 canvas.create_rectangle(0.0, 0.0, 261.0, 450.0, fill="#717171", outline="")  # Background esquerda
 
@@ -74,7 +75,7 @@ text_id = canvas.create_text(410.0, 27.0, anchor="nw", text="", fill="#000000", 
 canvas.create_rectangle(292.0, 113.0, 632.0, 338.0, fill="#9F9F9F", outline="")
 canvas.create_text(292.0, 89.0, anchor="nw", text="Videos baixados:", fill="#000000", font=("Inter", 21 * -1))
 
-# Criação do Text widget para exibir mensagens de progresso
+# Text widget para exibir mensagens de progresso
 text_widget = Text(
     window,
     width=47,
@@ -87,9 +88,8 @@ text_widget = Text(
     highlightthickness=0
 )
 text_widget.insert("end", "Mensagens do terminal:\n")
-text_widget.config(state="disabled")  # Desabilita a edição inicial
+text_widget.config(state="disabled")
 
-# Adiciona o Text widget ao Canvas
 canvas.create_window(300, 120, anchor="nw", window=text_widget)
 
 # Botão de download
