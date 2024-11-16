@@ -1,0 +1,2 @@
+python-dotenv==1.0.1
+pytubefix==8.4.0

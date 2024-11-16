@@ -3,7 +3,6 @@ from pathlib import Path
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
 import os
 from Scripts.downloader import Audio
-import time
 
 from pytubefix import Playlist
 
