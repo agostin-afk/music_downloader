@@ -13,8 +13,9 @@ OUTPUT_PATH = os.getenv('DIR_FILE')
 ASSETS_PATH = str(OUTPUT_PATH) + "\\assets\\frame0"
 
 
-def relative_to_assets(path: str) -> Path:
-    return ASSETS_PATH / Path(path)
+def relative_to_assets(path):
+    base_path = os.path.join(os.path.dirname(__file__), "assets", "frame0")
+    return os.path.join(base_path, path)
 
 def download():
     p = Audio()
