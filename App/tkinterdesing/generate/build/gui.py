@@ -2,6 +2,7 @@ from dotenv import load_dotenv
 from pathlib import Path
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
 import os
+import threading
 from Scripts.downloader import Audio
 
 from pytubefix import Playlist
@@ -18,22 +19,26 @@ def relative_to_assets(path):
     return os.path.join(base_path, path)
 
 def download():
-    p = Audio()
-    playlist_url = entry_1.get()
-    playlist = Playlist(playlist_url)
-    
+    def background_task():
+        p = Audio()
+        playlist_url = entry_1.get()
+        playlist = Playlist(playlist_url)
 
-    title_box = playlist.title.encode("utf-8").decode("utf-8")
-    canvas.itemconfig(text_id, text=title_box)
+        # Atualizar título da playlist na interface
+        title_box = playlist.title.encode("utf-8").decode("utf-8")
+        canvas.itemconfig(text_id, text=title_box)
 
+        # Processar cada vídeo da playlist
+        for video_url in playlist:
+            text_widget.config(state="normal")
+            text_widget.insert("end", f"{p.download_audio(video_url)}\n")
+            text_widget.see("end")
+            text_widget.update()
+            text_widget.config(state="disabled")
 
-    for _ in playlist:
-        text_widget.config(state="normal")
-        text_widget.insert("end",f"{p.download_audio(_)}\n")
-        text_widget.see("end")
-        text_widget.update()
-        text_widget.config(state="disabled")
-
+    # Criar thread para executar o download em segundo plano
+    download_thread = threading.Thread(target=background_task)
+    download_thread.start()
 
 window = Tk()
 window.geometry("670x450")
