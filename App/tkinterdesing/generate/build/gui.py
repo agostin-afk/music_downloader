@@ -54,7 +54,6 @@ def download():
 
 
 window = Tk()
-window.title("download do Agosto")
 window.geometry("670x450")
 window.configure(bg="#FFFFFF")
 
