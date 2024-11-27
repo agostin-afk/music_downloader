@@ -18,27 +18,40 @@ def relative_to_assets(path):
     base_path = os.path.join(os.path.dirname(__file__), "assets", "frame0")
     return os.path.join(base_path, path)
 
+def update_ui_callback(result):
+    text_widget.config(state="normal")
+    text_widget.insert("end", f"{result}\n")
+    text_widget.see("end")
+    text_widget.update()
+    text_widget.config(state="disabled")
+
 def download():
     def background_task():
-        p = Audio()
+        p = Audio(update_ui_callback) 
         playlist_url = entry_1.get()
         playlist = Playlist(playlist_url)
 
-        # Atualizar título da playlist na interface
-        title_box = playlist.title.encode("utf-8").decode("utf-8")
+
+        title_box = str(playlist.title)
         canvas.itemconfig(text_id, text=title_box)
 
-        # Processar cada vídeo da playlist
-        for video_url in playlist:
-            text_widget.config(state="normal")
-            text_widget.insert("end", f"{p.download_audio(video_url)}\n")
+
+        video_urls = playlist.video_urls 
+        results = p.process_playlist(playlist_url)
+
+
+        text_widget.config(state="normal")
+        for result in results:
+            text_widget.insert("end", f"{result}\n")
             text_widget.see("end")
             text_widget.update()
-            text_widget.config(state="disabled")
+        text_widget.config(state="disabled")
 
-    # Criar thread para executar o download em segundo plano
+
     download_thread = threading.Thread(target=background_task)
     download_thread.start()
+
+
 
 window = Tk()
 window.geometry("670x450")
@@ -56,8 +69,8 @@ canvas = Canvas(
 canvas.place(x=0, y=0)
 
 
-canvas.create_rectangle(0.0, 0.0, 670.0, 450.0, fill="#D9D9D9", outline="")  # Background direita
-canvas.create_rectangle(0.0, 0.0, 261.0, 450.0, fill="#717171", outline="")  # Background esquerda
+canvas.create_rectangle(0.0, 0.0, 670.0, 450.0, fill="#D9D9D9", outline="")  
+canvas.create_rectangle(0.0, 0.0, 261.0, 450.0, fill="#717171", outline="") 
 
 # Ícone do YouTube
 image_image_1 = PhotoImage(file=relative_to_assets("image_1.png"))
