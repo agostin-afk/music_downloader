@@ -3,7 +3,8 @@ from pydub import AudioSegment
 import os
 import datetime
 from concurrent.futures import ThreadPoolExecutor, as_completed
-
+from platformdirs import user_desktop_dir
+desktop_path = user_desktop_dir()
 class Audio:
     def __init__(self, update_ui_callback):
         self.name_arqv = self.create_Arqv()
@@ -14,7 +15,7 @@ class Audio:
         try:
             yt = YouTube(video_url)
             audio_stream = yt.streams.filter(only_audio=True).first()
-            audio_file = audio_stream.download(output_path="C:\\Users\\agost\\OneDrive\\Área de Trabalho\\Musicas")  # type: ignore
+            audio_file = audio_stream.download(output_path=desktop_path + "\\Musicas")  # type: ignore
             self.convert_m4a_to_mp3(audio_file)  # type: ignore
             result = f'Áudio do vídeo {yt.title} baixado e convertido para MP3 com sucesso.'
             self.update_ui_callback(result)
@@ -38,7 +39,7 @@ class Audio:
     def create_Arqv(self):
         """Cria um arquivo de log para registrar erros."""
         file_name = f"{datetime.date.today()}.txt"
-        file_path = os.path.join("C:\\Users\\agost\\OneDrive\\Área de Trabalho\\", file_name)
+        file_path = os.path.join(desktop_path+"\\", file_name)
         if not os.path.exists(file_path):
             with open(file_path, 'w', encoding="UTF-8") as arqv:
                 pass
