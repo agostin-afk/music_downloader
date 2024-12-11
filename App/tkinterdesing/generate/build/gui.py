@@ -23,7 +23,15 @@ def update_ui_callback(result: str) -> None:
     text_widget.config(state="disabled")
     return None
 
+def on_enter(e):
+    button_1.config(bg="#66b3ff", relief="raised", bd=2)  # Efeito ao passar o mouse: fundo e borda mais elevadas
 
+def on_leave(e):
+    button_1.config(bg="#4d94ff", relief="flat", bd=0)  # Restaura ao deixar o mouse
+
+def on_click(e):
+    button_1.config(bg="#3385ff") 
+    
 def download() -> None:
     """
         Função principal responsável por iniciar o processo de download de áudios de uma playlist do YouTube:
@@ -97,12 +105,12 @@ canvas.place(x=0, y=0)
 canvas.create_rectangle(0.0, 0.0, 670.0, 450.0, fill="#D9D9D9", outline="")  
 canvas.create_rectangle(0.0, 0.0, 261.0, 450.0, fill="#717171", outline="") 
 
-# Ícone do YouTube
+# Ícone do Linux
 image_image_1 = PhotoImage(file=relative_to_assets("image_1.png"))
-canvas.create_image(130.0, 117.0, image=image_image_1)
+canvas.create_image(130.0, 150.0, image=image_image_1)
 
 # Texto abaixo do ícone do YouTube
-canvas.create_text(127.0, 230.0, text="Downloader", fill="#000000", font=("Inter", 21 * -1))
+canvas.create_text(127.0, 230.0, text="▶︎", fill="#000000", font=("Inter", 21 * -1))
 
 # Caixa de entrada de URL
 entry_image_1 = PhotoImage(file=relative_to_assets("entry_1.png"))
@@ -111,12 +119,12 @@ entry_1 = Entry(bd=0, bg="#D9D9D9", fg="#000716", highlightthickness=0)
 entry_1.place(x=26.5, y=305.0, width=208.0, height=35.0)
 
 # Título da playlist
-canvas.create_text(292.0, 27.0, anchor="nw", text="Playlist title:", fill="#000000", font=("Inter", 21 * -1))
+canvas.create_text(292.0, 27.0, anchor="nw", text=" ", fill="#000000", font=("Inter", 21 * -1))
 text_id = canvas.create_text(410.0, 27.0, anchor="nw", text="", fill="#000000", font=("Inter", 21 * -1))
 
 # Área para vídeos baixados
 canvas.create_rectangle(292.0, 113.0, 632.0, 338.0, fill="#9F9F9F", outline="")
-canvas.create_text(292.0, 89.0, anchor="nw", text="Videos baixados:", fill="#000000", font=("Inter", 21 * -1))
+canvas.create_text(292.0, 89.0, anchor="nw", text="Videos baixados:", fill="#000000", font=("Arial", 14, "bold"),)
 
 # Text widget para exibir mensagens de progresso
 text_widget = Text(
@@ -136,15 +144,29 @@ text_widget.config(state="disabled")
 canvas.create_window(300, 120, anchor="nw", window=text_widget)
 
 # Botão de download
-button_image_1 = PhotoImage(file=relative_to_assets("button_1.png"))
 button_1 = Button(
-    image=button_image_1,
-    borderwidth=0,
-    highlightthickness=0,
-    command=download,
-    relief="flat"
+    text="▶︎Download",  # Texto do botão
+    font=("Arial", 14, "bold"),  # Fonte do texto
+    fg="white",  # Cor do texto
+    bg="#4d94ff",  # Cor de fundo inicial (azul)
+    relief="flat",  # Sem borda inicial (plano)
+    bd=0,  # Sem borda externa
+    width=20,  # Largura do botão
+    height=2,  # Altura do botão
+    activebackground="#3385ff",  # Cor de fundo ao clicar
+    activeforeground="white",  # Cor do texto ao clicar
+    command=download,  # Ação ao clicar
+    highlightthickness=0,  # Sem destaque de foco
 )
+
+# Adicionando o botão à janela
 button_1.place(x=75.0, y=359.0, width=111.0, height=40.0)
+
+# Bind para adicionar efeitos de hover e clique
+button_1.bind("<Enter>", on_enter)
+button_1.bind("<Leave>", on_leave)
+button_1.bind("<Button-1>", on_click)
+
 
 # Texto informativo sobre erros de download
 canvas.create_text(
@@ -152,7 +174,7 @@ canvas.create_text(
     347.0,
     anchor="nw",
     text="""Videos com erros no download vão ser salvos em
-um .txt na área de trabalho""",
+um .txt no diretórios raiz do programa""",
     fill="#000000",
     font=("Inter", 14 * -1)
 )

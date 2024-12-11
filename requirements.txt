@@ -1,3 +1,4 @@
 pydub==0.25.1
 python-dotenv==1.0.1
 pytubefix==8.4.0
+platformdirs == 4.3.6

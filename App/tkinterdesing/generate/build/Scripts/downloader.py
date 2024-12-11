@@ -4,7 +4,9 @@ import os
 import datetime
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from platformdirs import user_desktop_dir
-desktop_path = user_desktop_dir()
+
+
+desktop_path = '../../../../'
 
 
 class Audio:
@@ -17,7 +19,7 @@ class Audio:
         try:
             yt = YouTube(video_url)
             audio_stream = yt.streams.filter(only_audio=True).first()
-            audio_file = audio_stream.download(output_path=desktop_path + "\\Musicas")  # type: ignore
+            audio_file = audio_stream.download(output_path=desktop_path + "Musicas")
             self.convert_m4a_to_mp3(audio_file)  # type: ignore
             result = f'Áudio do vídeo {yt.title} baixado e convertido para MP3 com sucesso.'
             self.update_ui_callback(result)
@@ -39,12 +41,11 @@ class Audio:
             self.update_ui_callback(error_msg)
 
     def create_Arqv(self):
-        """Cria um arquivo de log para registrar erros."""
-        file_name = f"{datetime.date.today()}.txt"
-        file_path = os.path.join(desktop_path+"\\", file_name)
-        if not os.path.exists(file_path):
-            with open(file_path, 'w', encoding="UTF-8") as arqv:
-                pass
+        directory = os.path.expanduser('../../../../')
+        os.makedirs(directory, exist_ok=True)  
+        file_path = os.path.join(directory, "2024-12-11.txt")
+        with open(file_path, 'w', encoding="UTF-8") as arqv:
+            arqv.write("")  
         return file_path
 
     def add_Video_Erro_List(self, name_video, name_arqv):
