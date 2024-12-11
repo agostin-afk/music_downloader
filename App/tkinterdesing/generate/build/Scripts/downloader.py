@@ -5,6 +5,8 @@ import datetime
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from platformdirs import user_desktop_dir
 desktop_path = user_desktop_dir()
+
+
 class Audio:
     def __init__(self, update_ui_callback):
         self.name_arqv = self.create_Arqv()

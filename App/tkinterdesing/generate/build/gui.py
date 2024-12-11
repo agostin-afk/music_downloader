@@ -1,44 +1,71 @@
-from dotenv import load_dotenv
-from pathlib import Path
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
 import os
 import threading
 from Scripts.downloader import Audio
-
 from pytubefix import Playlist
 
 
-BASE_DIR = Path(__file__).resolve().parent.parent.parent.parent.parent
-load_dotenv(BASE_DIR / 'dotenv_files' / '.env', override=True)
-OUTPUT_PATH = os.getenv('DIR_FILE')
-ASSETS_PATH = str(OUTPUT_PATH) + "\\assets\\frame0"
-
-
-def relative_to_assets(path):
+def relative_to_assets(file: str) -> str:
+    "Para não usar .env || so as not to use .env"
     base_path = os.path.join(os.path.dirname(__file__), "assets", "frame0")
-    return os.path.join(base_path, path)
+    return os.path.join(base_path, file)
 
-def update_ui_callback(result):
+
+def update_ui_callback(result: str) -> None:
+    """
+    Vai ser chamada sempre que for necessario imprimir algo na interface || It will be called whenever you need to print something in the interface
+    .see() trava o scroller para o final
+    """
     text_widget.config(state="normal")
     text_widget.insert("end", f"{result}\n")
     text_widget.see("end")
     text_widget.update()
     text_widget.config(state="disabled")
+    return None
 
-def download():
+
+def download() -> None:
+    """
+        Função principal responsável por iniciar o processo de download de áudios de uma playlist do YouTube:
+        1. Capturar a URL da playlist inserida pelo usuário.
+        2. Obter informações sobre a playlist, como o título.
+        3. Processar os vídeos da playlist e fazer o download dos áudios.
+        4. Atualizar a interface gráfica com o progresso e os resultados.
+        ||
+        Main function responsible for starting the process of downloading audios from a YouTube playlist:
+        1. Capturing the URL of the playlist entered by the user.
+        2. Obtain information about the playlist, such as the title.
+        3. Process the videos in the playlist and download the audio.
+        4. Update the graphical interface with the progress and results.
+
+        """
     def background_task():
+        """
+        Função que realiza o processamento da playlist e os downloads em uma thread:
+        - Inicializa a classe `Audio` com o callback para atualizar a interface gráfica.
+        - Obtém a URL da playlist a partir do campo de entrada da interface.
+        - Carrega as informações da playlist (título e URLs dos vídeos).
+        - Atualiza o título da playlist na interface.
+        - Processa e realiza o download dos áudios dos vídeos da playlist.
+        - Exibe mensagens de sucesso ou erro no `Text Widget` da interface.
+        ||
+        Function that processes the playlist and downloads in one thread:
+        - Initializes the `Audio` class with the callback to update the graphical interface.
+        - Gets the playlist URL from the interface input field.
+        - Loads the playlist information (title and video URLs).
+        - Updates the playlist title in the interface.
+        - Processes and downloads the audios of the videos in the playlist.
+        - Displays success or error messages in the interface's Text Widget.
+        """
         p = Audio(update_ui_callback) 
         playlist_url = entry_1.get()
         playlist = Playlist(playlist_url)
 
-
         title_box = str(playlist.title)
         canvas.itemconfig(text_id, text=title_box)
 
-
         video_urls = playlist.video_urls 
         results = p.process_playlist(playlist_url)
-
 
         text_widget.config(state="normal")
         for result in results:
@@ -47,11 +74,9 @@ def download():
             text_widget.update()
         text_widget.config(state="disabled")
 
-
     download_thread = threading.Thread(target=background_task)
     download_thread.start()
-
-
+    return None
 
 window = Tk()
 window.geometry("670x450")
@@ -134,5 +159,5 @@ um .txt na área de trabalho""",
 
 
 # Configuração final da janela
-window.resizable(False, False)
+window.resizable(False, False) #Recomendação: não habilitar o resizable
 window.mainloop()
