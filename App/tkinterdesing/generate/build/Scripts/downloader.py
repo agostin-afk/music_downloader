@@ -15,7 +15,7 @@ class Audio:
     def download_audio(self, video_url):
         """Baixa o áudio do vídeo e converte para MP3."""
         try:
-            yt = YouTube(video_url)
+            yt = YouTube(video_url, use_po_token=True)
             audio_stream = yt.streams.filter(only_audio=True).first()
             audio_file = audio_stream.download(output_path=desktop_path + "\\Musicas")  # type: ignore
             self.convert_m4a_to_mp3(audio_file)  # type: ignore
